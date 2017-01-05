@@ -1,0 +1,259 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+struct Node {
+	string data;
+	Node *next;
+};
+
+class LinkedList {
+	Node *head;
+	Node *tail;
+public:
+	LinkedList() {
+		head = NULL;
+		
+	}
+	void print() {
+		if (head == NULL)
+			return;
+		Node *node = head;
+		while (node != NULL) {
+			cout << node->data<<endl;
+			node = node->next;
+		}
+	}
+
+
+	string getNthValuefromEnd(int n) {
+
+		if (head == NULL) {
+			return NULL;
+		}
+		int count = 0;
+		Node *ptr1 = head;
+		Node *ptr2 = head;
+		while (count < n) {
+			if (ptr2 == NULL)
+				return false;
+			ptr2 = ptr2->next;
+			count++;
+		}
+		while (ptr2 != NULL) {
+			ptr1 = ptr1->next;
+			ptr2 = ptr2->next;
+		}
+		return ptr1->data;
+	}
+
+	string valueAt(int index) {
+		if (head == NULL) {
+			return 0;
+		}
+		int count = 0;
+		Node *node = head;
+		while (node != NULL) {
+			if (count == index) {
+				return node->data;
+			}
+			else {
+				count++;
+				node = node->next;
+			}
+
+		}
+
+	}
+
+	void DeleteFirstNode() {
+		if (head == NULL)
+			return;
+		Node *node = head;
+		head = node->next;
+		delete node;
+		cout << "After the first node is deleted: " << endl;
+		print();
+	}
+
+	void DeleteAtEnd() {
+
+		if (head == NULL)
+			return;
+		Node *prev = NULL;
+		Node *node = head;
+		while (node != tail) {
+			prev = node;
+			node = node->next;
+		}
+		tail = prev;
+		tail->next = NULL;
+		delete node;
+		cout << "Delete at the end: " << endl;
+		print();
+		cout << "tail: "<<tail->data<<endl;
+	}
+
+	void DeleteAtIndex(int index) {
+		if (head == NULL)
+			return;
+		else if (index == 0)
+			DeleteFirstNode();
+		else {
+			int count = 0;
+			Node *prev = NULL;
+			Node *node = head;
+			while (node != tail) {
+				count++;
+				prev = node;
+				node = node->next;
+			}
+			prev->next = node->next;
+			delete node;
+			cout << "The list after deleting at an index: " << endl;
+			print();
+		}
+
+	}
+
+	bool isCyclePresent() {
+		if (head == NULL)
+			return false;
+		Node *slow_node = head;
+		Node *fast_node = head;
+		while (slow_node && fast_node && fast_node->next) {
+			slow_node = slow_node->next;
+			fast_node = fast_node->next->next;
+			if (slow_node == fast_node)
+				return true;
+
+		}
+		return false;
+	}
+
+	void InsertAfterTail(string val) {
+		Node *new_node = new Node;
+		new_node->data = val;
+		new_node->next = NULL;
+		if (head == NULL) {
+
+			head = new_node;
+			tail = head;
+		}
+		else {
+			Node *crawler = tail;
+			crawler->next = new_node;
+			tail = new_node;
+		}
+		//cout << "Tail: " << tail->data << endl;
+		//cout << "Head: " << head->data << endl<<endl;
+		//cout << "After the node is inserted after tail: " << endl;
+		print();
+
+	}
+	
+	void InsertBeforeHead(string val) {
+		Node *new_node = new Node;
+		new_node->data = val;
+		new_node->next = NULL;
+		if (head == NULL) {
+			
+			head = new_node;
+		   tail = head;
+		}
+		else {
+		
+			Node *crawler = head;
+			new_node->next = crawler;
+			head = new_node;
+		}
+	//	cout << "tail: " << tail->data << endl;
+		print();
+		
+	}
+	string getMiddleValue() {
+		if (head == NULL)
+			return NULL;
+		Node *slow_node = head;
+		Node *fast_node = head;
+		while (fast_node && fast_node->next) {
+			slow_node = slow_node->next;
+			fast_node = fast_node->next->next;
+		}
+		return slow_node->data;
+
+	}
+
+	void reverse() {
+		Node *prev = NULL;
+		Node *next;
+		Node *current = head;
+
+		while (current != NULL) {
+			next = current->next;
+			current->next = prev;
+			prev = current;
+			current = next;
+		}
+
+		head = prev;
+		print();
+	}
+	void reverseListRecursive(Node *current) {
+		if(current->next == NULL){
+			head = current;
+			return;
+
+	}
+		reverseListRecursive(current->next);
+		print();
+	
+		
+	}
+
+	
+};
+
+
+int main(){
+	/*Manual Insertion of the linked List. 
+	Node *head = new Node;
+	head->data = "a";
+	head->next = new Node;
+	head->next->data = "b";
+	head->next->next = new Node;
+	head->next->next->data = "c";
+	head->next->next->next = new Node;
+	head->next->next->next->data = "d";
+	head->next->next->next->next = new Node;
+	head->next->next->next->next->data = "e";
+	cout << head->data << endl;
+	cout << head->next->data << endl;
+	cout << head->next->next->data << endl;
+	cout << head->next->next->data << endl;
+	cout << head->next->next->next->data << endl;
+	cout << head->next->next->next->next->data << endl;
+	*/
+	//LinkedList *ll = new LinkedList();
+//	ll->InsertBeforeHead("e");
+	//ll->InsertBeforeHead("d");
+	//ll->InsertBeforeHead("c");
+
+	LinkedList *LL1 = new LinkedList();
+	LL1->InsertAfterTail("a");
+	LL1->InsertAfterTail("b");
+	LL1->InsertAfterTail("c");
+	LL1->InsertAfterTail("d");
+	LL1->InsertAfterTail("e");
+	LL1->reverse();
+	//cout<<"The nth node from end of linked list is: "<<LL1->getNthValuefromEnd(3) << endl;
+	//LL1->InsertAfterTail("c");
+	//cout << "The middle Node is: " << LL1->getMiddleValue()<<endl;
+	//cout << LL1->isCyclePresent();
+	//cout << "The node at the index is: "<<LL1->valueAt(1)<<endl<<endl ;
+	//LL1->DeleteFirstNode();
+	//LL1->DeleteAtEnd();
+	//LL1->DeleteAtIndex(1);
+	return 0;
+}
